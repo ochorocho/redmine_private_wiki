@@ -1,0 +1,45 @@
+<% if @wiki && @wiki.sidebar -%>
+  <%= textilizable @wiki.sidebar.content, :text %>
+<% end -%>
+
+<h3><%= l(:label_wiki) %></h3>
+<ul>
+  <li><%= link_to(l(:field_start_page), {:action => 'show', :id => nil}) %></li>
+  <li><%= link_to(l(:label_index_by_title), {:action => 'index'}) %></li>
+  <li><%= link_to(l(:label_index_by_date),
+                  {:controller => 'wiki', :project_id => @project,
+                   :action => 'date_index'}) %></li>
+</ul>
+
+<% 
+    @wikiGroups = WikiPage.where(:wiki_id => @wiki.id).where(:title => params[:id])[0]
+    @groupPerm = Group.find(@wikiGroups.group.split(','))
+%>
+
+<% if @wikiGroups.private == true %>
+
+
+    <h3><%= l(:label_permission) %>
+        <a id="addWikiUser" href="<%= Setting.protocol.downcase %>://<%= Setting.host_name %>/groupprivate/showform"><%= l(:label_add) %></a>
+    </h3>
+
+    <ul id="privatPerm" 
+        data-id="<%= @wikiGroups.id %>"
+        data-wiki="<%= @wiki.id %>"
+        data-url="<%= Setting.protocol.downcase %>://<%= Setting.host_name %>/groupprivate/show">
+    
+    <% for group in @groupPerm -%>
+    	<li>
+            <div class="groups"><%= group %></div>
+    	</li>
+    <% end -%>
+    </ul>
+<% end -%>
+
+<div id="privateWikiUserDialog" title="<%= l(:label_permission_group) %>">
+    <form class="form"
+        data-wiki="<%= @wiki.id %>"
+        data-title="<%= params[:id] %>"
+        data-url="<%= Setting.protocol.downcase %>://<%= Setting.host_name %>/groupprivate/write">
+    </form>
+</div>

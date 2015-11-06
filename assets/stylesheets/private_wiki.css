@@ -16,3 +16,28 @@ span.private {
     border-radius: 3px;
     -moz-border-radius: 3px;
 }
+
+#addWikiUser {
+    font-size: 12px !important;
+    float: right;
+    margin-top: 6px;
+}
+
+#privateWikiUserDialog > div {
+    margin: 5px 0;
+}
+
+#privatPerm .groups {
+    background-image: url("../images/group.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding: 2px 0 2px 20px;
+    color: #467aa7;
+    font-weight: bold;
+}
+#privatPerm li {
+    margin-top: 3px !important;
+    margin-bottom: 3px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}

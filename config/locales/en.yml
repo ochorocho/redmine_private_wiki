@@ -5,3 +5,7 @@ en:
   button_hide_wiki: Hide
   button_reveal_wiki: Reveal
   private: PRIVATE
+  label_permission: Permission
+  label_add: Add
+  label_permission_group: Add group permission
+  label_filter_group: Nach Gruppen filtern

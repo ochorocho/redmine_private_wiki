@@ -1,0 +1,11 @@
+en:
+  private_wiki: Private Wiki
+  permission_view_private_wiki_pages: Private Wiki Seiten ansehen
+  permission_manage_private_wiki_pages: Privte Wiki Seiten verwalten
+  button_hide_wiki: Verbergen
+  button_reveal_wiki: Zeigen
+  private: PRIVAT
+  label_permission: Zugriff
+  label_add: Hinzufügen
+  label_permission_group: Gruppenberechtigung hinzufügen
+  label_filter_group: Filter Groups
