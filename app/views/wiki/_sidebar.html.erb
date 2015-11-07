@@ -11,28 +11,39 @@
                    :action => 'date_index'}) %></li>
 </ul>
 
+<!-- <%= debug(User.current.groups) %> -->
+
+
 <% 
+    if params[:id].blank?
+        params[:id] = @wiki.start_page
+    end
+
     @wikiGroups = WikiPage.where(:wiki_id => @wiki.id).where(:title => params[:id])[0]
-    @groupPerm = Group.find(@wikiGroups.group.split(','))
+    if @wikiGroups.group
+        @groupPerm = Group.find(@wikiGroups.group.split(','))
+     end
 %>
 
-<% if @wikiGroups.private == true %>
 
-
+<% if @wikiGroups.private == true && params[:controller] == 'wiki' && params[:action] == 'show' %>
     <h3><%= l(:label_permission) %>
-        <a id="addWikiUser" href="<%= Setting.protocol.downcase %>://<%= Setting.host_name %>/groupprivate/showform"><%= l(:label_add) %></a>
+        <a id="addWikiUser" href="<%= Setting.protocol.downcase %>://<%= Setting.host_name %>/groupprivate/showform">
+            <%= l(:label_add) %>
+        </a>
     </h3>
 
     <ul id="privatPerm" 
         data-id="<%= @wikiGroups.id %>"
         data-wiki="<%= @wiki.id %>"
         data-url="<%= Setting.protocol.downcase %>://<%= Setting.host_name %>/groupprivate/show">
-    
-    <% for group in @groupPerm -%>
-    	<li>
-            <div class="groups"><%= group %></div>
-    	</li>
-    <% end -%>
+        <% if @wikiGroups.group %>
+            <% for group in @groupPerm -%>
+            	<li>
+                    <div class="groups"><%= group %></div>
+            	</li>
+            <% end -%>
+        <% end -%>
     </ul>
 <% end -%>
 

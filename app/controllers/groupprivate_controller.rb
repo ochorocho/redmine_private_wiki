@@ -45,32 +45,37 @@ class GroupprivateController < ApplicationController
 	def showform
 
         @wikiGroups = WikiPage.find(params[:id])
-        @usersAll = Group.find(@wikiGroups.group.split(','))
-
+        if @wikiGroups.group
+            @groupPerm = Group.find(@wikiGroups.group.split(','))
+        end
+        
         @groupAll = Group.all
         @checkboxed = []
         for group in @groupAll
-        	if @usersAll.include?(group)
-            	@checkboxed << ['checked' => true, 'name' => group.name, 'id' => group.id]
+        	if @wikiGroups.group
+                if @groupPerm.include?(group)
+                	@checkboxed << ['checked' => true, 'name' => group.name, 'id' => group.id]
+                else
+                	@checkboxed << ['checked' => false, 'name' => group.name, 'id' => group.id]
+                end
             else
-            	@checkboxed << ['checked' => false, 'name' => group.name, 'id' => group.id]            
+                @checkboxed << ['checked' => false, 'name' => group.name, 'id' => group.id]
             end
         end
 
+		if params[:id].nil?
+            @json = ['status' => 'error']
+		else
 
-			if params[:id].nil?
-                @json = ['status' => 'error']
-			else
+            @wiki = WikiPage.find(params[:id])                
+    	    @groups = Group.find(@wiki.group.split(','))
 
-                @wiki = WikiPage.find(params[:id])                
-        	    @groups = Group.find(@wiki.group.split(','))
-
-                @json = [
-                    'status' => 'success',
-                    'groups' => @checkboxed]
-            end
-            
-            render json: @json
+            @json = [
+                'status' => 'success',
+                'groups' => @checkboxed]
+        end
+        
+        render json: @json
 	end
 
 end

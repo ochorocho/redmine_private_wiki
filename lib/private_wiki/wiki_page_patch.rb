@@ -4,6 +4,7 @@ module PrivateWiki
       base.send(:include, InstanceMethods)
       base.class_eval do
         unloadable
+        attr_protected :group
         attr_protected :private
         alias_method_chain :visible?, :private_wiki
         #named_scope :nonprivate_only, :conditions => {:private => false}
@@ -13,7 +14,18 @@ module PrivateWiki
     module InstanceMethods
 
       def private_page_visible?(project, user)
-        !user.nil? && user.allowed_to?(:view_private_wiki_pages, project)
+#        @wikiGroups = WikiPage.where(:wiki_id => project.wiki.id).where(:title => params[:id])[0]
+
+#         logger.info "############# #{User.current.group_ids} ############### #{!user.nil? && User.current.group_ids.include?(group)} ### "
+
+        group = self.group.split(',').map(&:to_i)
+        
+
+        @intersection = User.current.group_ids & group
+#        logger.info "### #{@intersection} #### #{group} --- #{User.current.group_ids.map(&:to_i)} #### #{(User.current.group_ids & group).empty?}"
+        logger.info "---> #{!@intersection.blank?}"
+        
+        !user.nil? && user.allowed_to?(:view_private_wiki_pages, project) || !user.nil? && !@intersection.blank?
       end
 
       def visible_with_private_wiki?(user=User.current)
